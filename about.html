@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CAREFUEL - About</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Archivo Black', sans-serif; margin:0; padding:0; }
+
+    /* Full-page background behind content */
+    .background-layer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      min-height: 100%;
+      background: url('roadbg.png') center/cover no-repeat;
+      z-index: -1; /* behind everything */
+    }
+
+    /* Content box */
+    .content-box {
+      max-width: 6xl;
+      margin: 6rem auto 0 auto;
+      padding: 3rem 2rem;
+      background: white;
+      border-radius: 1rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      position: relative;
+      z-index: 1;
+    }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+  <div class="background-layer"></div> <!-- full-page background -->
+
+  <!-- Navbar -->
+  <header class="bg-white shadow relative z-20">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+      <a href="home.html" class="text-xl font-bold text-yellow-500">CAREFUEL</a>
+      <nav class="space-x-6">
+        <a href="home.html" class="text-gray-600 hover:text-yellow-500">Home</a>
+        <a href="game.html" class="text-gray-600 hover:text-yellow-500">Game</a>
+        <a href="about.html" class="text-gray-600 hover:text-yellow-500 font-bold">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- About Section -->
+  <section class="content-box">
+    <h2 class="text-3xl font-bold mb-6 text-center text-yellow-500">About CAREFUEL</h2>
+
+    <p class="mb-6 text-lg leading-relaxed">
+      Hi. My name is Finn, and I made CAREFUEL for a school project while learning web development. 
+      It's an <span class="font-semibold">interactive tool for people trying to get their learner’s license</span>. 
+      The idea came from seeing how hard it can be to remember road rules and practicing driving concepts 
+      just from a book. I wanted to make something more fun and hands-on.
+    </p>
+
+    <p class="mb-6 text-lg leading-relaxed">
+      CAREFUEL uses simple animations and quizzes to show how cars move around roundabouts, intersections, 
+      and other tricky spots. You can click on the animations, try to pick the right exit, 
+      and see how well you understand the rules in a safe environment.
+    </p>
+
+    <p class="mb-6 text-lg leading-relaxed">
+      I built this project to practice coding, designing pages, and making a small educational tool at the same time. 
+      It's still a work in progress, but I hope it helps learners feel more confident behind the wheel.
+    </p>
+
+    <p class="mb-6 text-lg leading-relaxed">
+      Thanks for checking out CAREFUEL.
+    </p>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-gray-300 py-8 mt-20 relative z-10">
+    <div class="max-w-6xl mx-auto px-6 flex justify-between items-center">
+      <p>&copy; 2025 CAREFUEL. All rights reserved.</p>
+      <div class="space-x-4">
+        <a href="#" class="hover:text-white">OLE</a>
+        <a href="#" class="hover:text-white">GitHub</a>
+        <a href="#" class="hover:text-white">YouTube</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
