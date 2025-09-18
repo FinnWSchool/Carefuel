@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CAREFUEL - Game</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Archivo Black', sans-serif; }
+    object {
+      cursor: pointer;
+      transition: transform 0.2s ease, border 0.2s ease;
+      border: 3px solid transparent;
+      border-radius: 12px;
+    }
+    object:hover {
+      transform: scale(1.05);
+      border: 3px solid #facc15;
+    }
+    .selected {
+      border: 3px solid #facc15 !important;
+      box-shadow: 0 0 10px #facc15;
+    }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+  <!-- Navbar -->
+  <header class="bg-white shadow relative z-20">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+      <a href="home.html" class="text-xl font-bold text-yellow-500">CAREFUEL</a>
+      <nav class="space-x-6">
+        <a href="home.html" class="text-gray-600 hover:text-yellow-500">Home</a>
+        <a href="game.html" class="text-gray-600 hover:text-yellow-500 font-bold">Game</a>
+        <a href="about.html" class="text-gray-600 hover:text-yellow-500">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Game Section with Background -->
+  <section class="relative py-20">
+    <img src="roadbg.png" class="absolute inset-0 w-full h-full object-cover" alt="Background road">
+    <div class="absolute inset-0 bg-black bg-opacity-60"></div>
+
+    <div class="relative max-w-4xl mx-auto px-6">
+      <!-- white bg element -->
+      <div id="quiz" class="bg-white rounded-xl shadow-lg p-10">
+        <h2 class="text-2xl font-bold mb-6 text-center text-gray-800">Choose the EXIT:</h2>
+        <h5 class="text-xl font-bold mb-6 text-center text-gray-600">Below are roundabouts with cars driving around them.</h5>
+        <p id="question" class="text-lg text-center mb-6">Loading question...</p>
+
+        <div id="options" class="grid md:grid-cols-2 gap-8"></div>
+
+        <p id="feedback" class="text-center mt-6 text-lg font-bold"></p>
+        <p id="score" class="text-center mt-2 text-gray-600"></p>
+
+        <div class="text-center mt-6">
+          <button id="nextBtn" class="bg-yellow-500 text-white px-6 py-3 rounded-lg shadow hover:bg-yellow-600">
+            Next Question
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- footer of webpage -->
+  <footer class="bg-gray-900 text-gray-300 py-8 mt-20">
+    <div class="max-w-6xl mx-auto px-6 flex justify-between items-center">
+      <p>&copy; 2025 CAREFUEL. All rights reserved.</p>
+      <div class="space-x-4">
+        <a href="#" class="hover:text-white">OLE</a>
+        <a href="#" class="hover:text-white">GitHub</a>
+        <a href="#" class="hover:text-white">YouTube</a>
+      </div>
+    </div>
+  </footer>
+
+<!-- script for the quiz -->
+<script>
+  // Array of possible exits in the game
+  const exits = [1, 2, 4];
+
+  // Variables to track game state
+  let correctExit = null; // The correct exit for the current question
+  let score = 0;          // Number of correct answers
+  let total = 0;          // Total questions answered
+  let answered = false;   // Tracks if the user has already clicked an answer
+
+  // Grab references to HTML elements so we can update them dynamically
+  const questionEl = document.getElementById("question"); // Question text
+  const feedbackEl = document.getElementById("feedback"); // Feedback message (correct/incorrect)
+  const scoreEl = document.getElementById("score");       // Score display
+  const optionsEl = document.getElementById("options");   // Container for the answer options
+
+  // Function to shuffle an array randomly
+  function shuffle(arr) {
+    return arr.sort(() => Math.random() - 0.5);
+  }
+
+  // Function to generate a new quiz question
+  function newQuestion() {
+    // Clear previous options and feedback
+    optionsEl.innerHTML = "";
+    feedbackEl.textContent = "";
+    answered = false; // Reset answered state so the user can click again
+
+    // Pick a random correct exit
+    correctExit = exits[Math.floor(Math.random() * exits.length)];
+
+    // Pick one wrong exit that is not the correct one
+    let otherExits = exits.filter(e => e !== correctExit);
+    let wrongExit = otherExits[Math.floor(Math.random() * otherExits.length)];
+
+    // Create a pair of [correct, wrong] and shuffle so order is random
+    let pair = shuffle([correctExit, wrongExit]);
+
+    // Update the question text on the page
+    questionEl.textContent = "Which animation shows the car taking exit " + correctExit + "?";
+
+    // Loop through each exit in the pair to create clickable options
+    pair.forEach((exitNum, idx) => {
+      // Create a container div for each option
+      const wrapper = document.createElement("div");
+      wrapper.className = "bg-gray-50 p-6 rounded-xl shadow text-center";
+
+      // Create an object element to load the SVG animation
+      const obj = document.createElement("object");
+      obj.type = "image/svg+xml"; // Specify that this is an SVG file
+      obj.data = "exit" + exitNum + ".svg"; // Link to the correct SVG file
+      obj.className = "mx-auto"; // Center the object in the container
+      wrapper.appendChild(obj);
+
+      // Add an optional label below the SVG (currently empty)
+      const label = document.createElement("h3");
+      label.className = "text-xl font-semibold mt-4 text-gray-800";
+      wrapper.appendChild(label);
+
+      // waits until the SVG loads for user interaction
+      obj.addEventListener("load", () => {
+        const svgDoc = obj.contentDocument; // accesses the SVG DOM
+        if (!svgDoc) return; // If SVG is not loaded properly, exit
+
+        // Make all animations loop indefinitely
+        svgDoc.querySelectorAll("animate, animateTransform, animateMotion")
+          .forEach(anim => anim.setAttribute("repeatCount", "indefinite"));
+
+        // Make the SVG clickable
+        const svgRoot = svgDoc.documentElement;
+        svgRoot.style.cursor = "pointer"; // Change cursor to pointer for clarity
+
+        // Event listener for when the user clicks the SVG
+        svgRoot.addEventListener("click", () => {
+          if (!answered) {              // Only allow first click
+            answered = true;            // Mark as answered
+            wrapper.classList.add("selected"); // Highlight the selected option
+            checkAnswer(exitNum);       // Check if the clicked exit is correct
+          }
+        });
+      });
+
+      // Add the option container to the page
+      optionsEl.appendChild(wrapper);
+    });
+  }
+
+  // Function to check if the user's choice is correct
+  function checkAnswer(choice) {
+    total++; // Increment total questions answered
+    if (choice === correctExit) {
+      score++; // Increment score if correct
+      feedbackEl.textContent = "✅ Correct!"; // Show correct feedback
+      feedbackEl.className = "text-center mt-6 text-lg font-bold text-green-500"; // Green styling
+    } else {
+      feedbackEl.textContent = "❌ Incorrect! That was exit " + choice + "."; // Show wrong feedback
+      feedbackEl.className = "text-center mt-6 text-lg font-bold text-red-500"; // Red styling
+    }
+    // Update score display
+    scoreEl.textContent = `Score: ${score} / ${total}`;
+  }
+
+  // Event listener for the "Next Question" button
+  document.getElementById("nextBtn").addEventListener("click", newQuestion);
+
+  // Start the game by showing the first question immediately
+  newQuestion();
+</script>
